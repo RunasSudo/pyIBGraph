@@ -23,8 +23,11 @@ X_U = "kPa^{-1}"
 Y_Q = "V"
 Y_U = "cm^3"
 
-EQ_POS = "upper right"
+EQ_POS = "upper right" #upper/lower left/right
 LEG_POS = "lower left"
+
+SWING_MODE = "" #cap, corner, bar, ends
+SWING_CENTRE = "middle" #middle, mean, median
 
 ERRORBAR_CAP_SIZE = 3 #points
 MINMAX_TRIES = 3
@@ -112,8 +115,12 @@ for trial in range(0, MINMAX_TRIES):
 	m0, c0, xl0, yl0, Rsqr = LOBF(xvar, yvar, 0, max(xvar))
 
 	# Maximum/minimum line
-	xmed = (min(xvar) + max(xvar)) / 2
-	ymed = m0*xmed + c0
+	xmed, ymed = False, False
+	
+	if SWING_CENTRE == "middle":
+		xmed = (min(xvar) + max(xvar)) / 2
+		ymed = m0*xmed + c0
+	
 	xabove = [ i for i,v in enumerate(xvar) if v>xmed ][0] # First index of xvar above mean (to exclude)
 	xbelow = [ i for i,v in enumerate(xvar) if v<xmed ][-1]
 
@@ -137,15 +144,15 @@ for trial in range(0, MINMAX_TRIES):
 			capsize_ux = capsize_u[0][0]
 			capsize_uy = capsize_u[0][1]
 
-			# Idiot method
-			tryPoint(xvar[i] + xunc[i], yvar[i] + capsize_uy)
-			tryPoint(xvar[i] + xunc[i], yvar[i] - capsize_uy)
-			tryPoint(xvar[i] - xunc[i], yvar[i] + capsize_uy)
-			tryPoint(xvar[i] - xunc[i], yvar[i] - capsize_uy)
-			tryPoint(xvar[i] + capsize_ux, yvar[i] + yunc[i])
-			tryPoint(xvar[i] - capsize_ux, yvar[i] + yunc[i])
-			tryPoint(xvar[i] + capsize_ux, yvar[i] - yunc[i])
-			tryPoint(xvar[i] - capsize_ux, yvar[i] - yunc[i])
+			if SWING_MODE == "cap":
+				tryPoint(xvar[i] + xunc[i], yvar[i] + capsize_uy)
+				tryPoint(xvar[i] + xunc[i], yvar[i] - capsize_uy)
+				tryPoint(xvar[i] - xunc[i], yvar[i] + capsize_uy)
+				tryPoint(xvar[i] - xunc[i], yvar[i] - capsize_uy)
+				tryPoint(xvar[i] + capsize_ux, yvar[i] + yunc[i])
+				tryPoint(xvar[i] - capsize_ux, yvar[i] + yunc[i])
+				tryPoint(xvar[i] + capsize_ux, yvar[i] - yunc[i])
+				tryPoint(xvar[i] - capsize_ux, yvar[i] - yunc[i])
 
 	_, cmax, xlmax, ylmax, _ = LOBF([xmed, xmmax], [ymed, ymmax], 0, max(xvar))
 	_, cmin, xlmin, ylmin, _ = LOBF([xmed, xmmin], [ymed, ymmin], 0, max(xvar))
