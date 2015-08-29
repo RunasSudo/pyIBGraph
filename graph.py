@@ -23,13 +23,13 @@ X_U = "kPa^{-1}"
 Y_Q = "V"
 Y_U = "cm^3"
 
-EQ_POS = "upper right" #upper/lower left/right
-LEG_POS = "lower left"
+EQ_POS = "upper left"
+LEG_POS = "lower right"
 
-SWING_MODE = "" #cap, corner, bar, ends
-SWING_CENTRE = "middle" #middle, mean, median
+SWING_MODE = "cap"
+SWING_CENTRE = "middle"
 
-ERRORBAR_CAP_SIZE = 3 #points
+ERRORBAR_CAP_SIZE = 3
 MINMAX_TRIES = 3
 
 import matplotlib as mpl
@@ -115,47 +115,75 @@ for trial in range(0, MINMAX_TRIES):
 	m0, c0, xl0, yl0, Rsqr = LOBF(xvar, yvar, 0, max(xvar))
 
 	# Maximum/minimum line
-	xmed, ymed = False, False
-	
+	xmed = False
 	if SWING_CENTRE == "middle":
 		xmed = (min(xvar) + max(xvar)) / 2
-		ymed = m0*xmed + c0
+	if SWING_CENTRE == "mean":
+		xmed = np.mean(xvar)
+	if SWING_CENTRE == "median":
+		xmed = np.median(xvar)
 	
-	xabove = [ i for i,v in enumerate(xvar) if v>xmed ][0] # First index of xvar above mean (to exclude)
-	xbelow = [ i for i,v in enumerate(xvar) if v<xmed ][-1]
-
-	xmmax, ymmax, mmax = False, False, False
-	xmmin, ymmin, mmin = False, False, False
-
-	def tryPoint(x, y):
-		global xmmax, ymmax, mmax, xmmin, ymmin, mmin
-		m = (max(y, ymed) - min(y, ymed)) / (max(x, xmed) - min(x, xmed))
-		if mmax == False or m > mmax:
-			xmmax, ymmax, mmax = x, y, m
-		if mmin == False or m < mmin:
-			xmmin, ymmin, mmin = x, y, m
-
-	for i in range(len(xvar)):
-		if i != xabove and i != xbelow:
-			# Do matplotlib magic
-			capsize_in = ERRORBAR_CAP_SIZE / 72 * 2
-			capsize_px = fig.dpi_scale_trans.transform([capsize_in, capsize_in])
-			capsize_u = ax.transData.inverted().transform([capsize_px, capsize_px]) - ax.transData.inverted().transform([0, 0])
-			capsize_ux = capsize_u[0][0]
-			capsize_uy = capsize_u[0][1]
-
-			if SWING_MODE == "cap":
-				tryPoint(xvar[i] + xunc[i], yvar[i] + capsize_uy)
-				tryPoint(xvar[i] + xunc[i], yvar[i] - capsize_uy)
-				tryPoint(xvar[i] - xunc[i], yvar[i] + capsize_uy)
-				tryPoint(xvar[i] - xunc[i], yvar[i] - capsize_uy)
-				tryPoint(xvar[i] + capsize_ux, yvar[i] + yunc[i])
-				tryPoint(xvar[i] - capsize_ux, yvar[i] + yunc[i])
-				tryPoint(xvar[i] + capsize_ux, yvar[i] - yunc[i])
-				tryPoint(xvar[i] - capsize_ux, yvar[i] - yunc[i])
-
-	_, cmax, xlmax, ylmax, _ = LOBF([xmed, xmmax], [ymed, ymmax], 0, max(xvar))
-	_, cmin, xlmin, ylmin, _ = LOBF([xmed, xmmin], [ymed, ymmin], 0, max(xvar))
+	ymed = m0*xmed + c0
+	
+	mmax, cmax, xlmax, ylmax, _ = False, False, False, False, False
+	mmin, cmin, xlmin, ylmin, _ = False, False, False, False, False
+	
+	if SWING_MODE != "ends":
+		xabove, xbelow = False, False
+		xabove = [ i for i,v in enumerate(xvar) if v>xmed ][0] # First index of xvar above mean (to exclude)
+		xbelow = [ i for i,v in enumerate(xvar) if v<xmed ][-1]
+		
+		xmmax, ymmax = False, False
+		xmmin, ymmin = False, False
+		
+		def tryPoint(x, y):
+			global xmmax, ymmax, mmax, xmmin, ymmin, mmin
+			m = (max(y, ymed) - min(y, ymed)) / (max(x, xmed) - min(x, xmed))
+			if mmax == False or m > mmax:
+				xmmax, ymmax, mmax = x, y, m
+			if mmin == False or m < mmin:
+				xmmin, ymmin, mmin = x, y, m
+		
+		for i in range(len(xvar)):
+			if i != xabove and i != xbelow:
+				# Do matplotlib magic
+				capsize_in = ERRORBAR_CAP_SIZE / 72 * 2
+				capsize_px = fig.dpi_scale_trans.transform([capsize_in, capsize_in])
+				capsize_u = ax.transData.inverted().transform([capsize_px, capsize_px]) - ax.transData.inverted().transform([0, 0])
+				capsize_ux = capsize_u[0][0]
+				capsize_uy = capsize_u[0][1]
+				
+				if SWING_MODE == "cap":
+					tryPoint(xvar[i] + xunc[i], yvar[i] + capsize_uy)
+					tryPoint(xvar[i] + xunc[i], yvar[i] - capsize_uy)
+					tryPoint(xvar[i] - xunc[i], yvar[i] + capsize_uy)
+					tryPoint(xvar[i] - xunc[i], yvar[i] - capsize_uy)
+					tryPoint(xvar[i] + capsize_ux, yvar[i] + yunc[i])
+					tryPoint(xvar[i] - capsize_ux, yvar[i] + yunc[i])
+					tryPoint(xvar[i] + capsize_ux, yvar[i] - yunc[i])
+					tryPoint(xvar[i] - capsize_ux, yvar[i] - yunc[i])
+				
+				if SWING_MODE == "corner":
+					tryPoint(xvar[i] + xunc[i], yvar[i] + yunc[i])
+					tryPoint(xvar[i] + xunc[i], yvar[i] - yunc[i])
+					tryPoint(xvar[i] - xunc[i], yvar[i] + yunc[i])
+					tryPoint(xvar[i] - xunc[i], yvar[i] - yunc[i])
+					tryPoint(xvar[i] + xunc[i], yvar[i] + yunc[i])
+					tryPoint(xvar[i] - xunc[i], yvar[i] + yunc[i])
+					tryPoint(xvar[i] + xunc[i], yvar[i] - yunc[i])
+					tryPoint(xvar[i] - xunc[i], yvar[i] - yunc[i])
+				
+				if SWING_MODE == "bar":
+					tryPoint(xvar[i] + xunc[i], yvar[i])
+					tryPoint(xvar[i] - xunc[i], yvar[i])
+					tryPoint(xvar[i], yvar[i] + yunc[i])
+					tryPoint(xvar[i], yvar[i] - yunc[i])
+		
+		_, cmax, xlmax, ylmax, _ = LOBF([xmed, xmmax], [ymed, ymmax], 0, max(xvar))
+		_, cmin, xlmin, ylmin, _ = LOBF([xmed, xmmin], [ymed, ymmin], 0, max(xvar))
+	else:
+		mmax, cmax, xlmax, ylmax, _ = LOBF([xvar[0] + xunc[0], xvar[-1] - xunc[-1]], [yvar[0] - yunc[0], yvar[-1] + yunc[-1]], 0, max(xvar))
+		mmin, cmin, xlmin, ylmin, _ = LOBF([xvar[0] - xunc[0], xvar[-1] + xunc[-1]], [yvar[0] + yunc[0], yvar[-1] - yunc[-1]], 0, max(xvar))
 
 	def shortQuantityAndUnit(q, u):
 		if u == "":
@@ -165,7 +193,7 @@ for trial in range(0, MINMAX_TRIES):
 
 	plt.text(
 		0.1 if "left" in EQ_POS else 0.9,
-		0.9 if "upper" in EQ_POS else 0.1,
+		0.95 if "upper" in EQ_POS else 0.05,
 		"$" + shortQuantityAndUnit(Y_Q, Y_U) + "=" + prettyNum(m0) + shortQuantityAndUnit(X_Q, X_U) + signedPretty(c0) + "$\n$R^2=" + prettyNum(Rsqr) + "$",
 		verticalalignment=("top" if "upper" in EQ_POS else "bottom"),
 		horizontalalignment=("left" if "left" in EQ_POS else "right"),
@@ -174,7 +202,7 @@ for trial in range(0, MINMAX_TRIES):
 
 	plt.text(
 		0.1 if "left" in EQ_POS else 0.9,
-		0.8 if "upper" in EQ_POS else 0.2,
+		0.85 if "upper" in EQ_POS else 0.15,
 		"$" + shortQuantityAndUnit(Y_Q + "_\\mathrm{max}", Y_U) + "=" + prettyNum(mmax) + shortQuantityAndUnit(X_Q, X_U) + signedPretty(cmax) + "$\n$" + shortQuantityAndUnit(Y_Q + "_\\mathrm{min}", Y_U) + "=" + prettyNum(mmin) + shortQuantityAndUnit(X_Q, X_U) + signedPretty(cmin) + "$",
 		verticalalignment=("top" if "upper" in EQ_POS else "bottom"),
 		horizontalalignment=("left" if "left" in EQ_POS else "right"),

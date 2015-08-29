@@ -34,3 +34,6 @@ Settings for the program are located at the top of the script:
   - `"middle"`: use the point on the line of best fit at the middle of the *x* data ((*x*<sub>max</sub> - *x*<sub>min</sub>) / 2)
   - `"mean"`: use the point on the line of best fit at the mean of the *x* data
   - `"median"`: use the point on the line of best fit at the median of the *x* data
+- **`ERRORBAR_CAP_SIZE`**: the size of the error bar caps, in points
+- **`MINMAX_TRIES`**: number of tries to attempt to swing the error bars
+  - Use `1` if using `SWING_MODE = "ends"`.
