@@ -104,8 +104,8 @@ for trial in range(0, MINMAX_TRIES):
 
 	ax.grid(True)
 	ax.autoscale_view(True, True, True)
-	plt.xlabel("$" + X_Q + "\\ /\\ \\mathrm{" + X_U + "}$")
-	plt.ylabel("$" + Y_Q + "\\ /\\ \\mathrm{" + Y_U + "}$")
+	plt.xlabel("$" + X_Q + ("\\ /\\ \\mathrm{" + X_U + "}" if X_U != "" else "") + "$")
+	plt.ylabel("$" + Y_Q + ("\\ /\\ \\mathrm{" + Y_U + "}" if Y_U != "" else "") + "$")
 
 	# Plot the data points
 	ax.scatter(xvar, yvar, color="#005c94", label="data")
