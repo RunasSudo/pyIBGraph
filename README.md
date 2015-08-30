@@ -3,7 +3,7 @@
 
 A program to draw IB Physics (2016 syllabus) style graphs, powered by Python 3, LaTeX, matplotlib and NumPy.
 
-Min/max lines are drawn by finding the centre of the data (max-min / 2) and progressively increasing/decreasing the slope of the line through this point until it encompasses the caps of all error bars.
+Min/max lines are drawn by finding the centre of the data and progressively increasing/decreasing the slope of the line through this point until it encompasses all desired points (by default, the caps of the error bars).
 
 If the min/max lines appear to miss the caps slightly, increase `MINMAX_TRIES` in the script.
 
@@ -32,7 +32,7 @@ Settings for the program are located at the top of the script:
   - `"ends"`: draw a line from the top-left/bottom-right corner formed by the error bars of the leftmost data point, to the bottom-right/top-left corner formed by the error bars of the rightmost data point (pre-2016 style)
 - **`SWING_CENTRE`**: the mode for calculating the middle of the data through which to swing the minimum and maximum lines
   - Use `""` if using `SWING_MODE = "ends"`.
-  - `"middle"`: use the point on the line of best fit at the middle of the *x* data ((*x*<sub>max</sub> - *x*<sub>min</sub>) / 2)
+  - `"middle"`: use the point on the line of best fit at the middle of the *x* data ((*x*<sub>max</sub> + *x*<sub>min</sub>) / 2)
   - `"mean"`: use the point on the line of best fit at the mean of the *x* data
   - `"median"`: use the point on the line of best fit at the median of the *x* data
 - **`ERRORBAR_CAP_SIZE`**: the size of the error bar caps, in points (e.g. `3`)
