@@ -1,17 +1,18 @@
 # pyIBGraph
 (Pronounced pie-B-graph.)
 
-A program to draw IB Physics (2016 syllabus) style graphs, powered by Python 3, matplotlib and NumPy.
+A program to draw IB Physics (2016 syllabus) style graphs, powered by Python 3, LaTeX, matplotlib and NumPy.
 
 Min/max lines are drawn by finding the centre of the data (max-min / 2) and progressively increasing/decreasing the slope of the line through this point until it encompasses the caps of all error bars.
 
-If the min/max lines appear to miss the caps slightly, increase MINMAX_TRIES in the script.
+If the min/max lines appear to miss the caps slightly, increase `MINMAX_TRIES` in the script.
 
 ## Dependencies
 Arch Linux package dependencies:
 - python-matplotlib
-- texlive-core
-- texlive-latexextra
+  - pulls in python and python-numpy
+- texlive-latexextra (various packages required)
+  - pulls in texlive-core (lualatex, TeX Gyre fonts and various core packages required)
 
 ## Configuration and Usage
 pyIBGraph reads data from a four-column comma-separated .csv file, with each data point being one row of the data file. The columns are the *x*-coordinate, the uncertainty in the *x*-coordinate, the *y*-coordinate, and the uncertainty in the *y*-coordinate.
@@ -34,6 +35,6 @@ Settings for the program are located at the top of the script:
   - `"middle"`: use the point on the line of best fit at the middle of the *x* data ((*x*<sub>max</sub> - *x*<sub>min</sub>) / 2)
   - `"mean"`: use the point on the line of best fit at the mean of the *x* data
   - `"median"`: use the point on the line of best fit at the median of the *x* data
-- **`ERRORBAR_CAP_SIZE`**: the size of the error bar caps, in points
-- **`MINMAX_TRIES`**: number of tries to attempt to swing the error bars
+- **`ERRORBAR_CAP_SIZE`**: the size of the error bar caps, in points (e.g. `3`)
+- **`MINMAX_TRIES`**: number of tries to attempt to swing the error bars (e.g. `3`)
   - Use `1` if using `SWING_MODE = "ends"`.
