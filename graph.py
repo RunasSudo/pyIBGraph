@@ -130,8 +130,8 @@ for trial in range(0, MINMAX_TRIES):
 	
 	if SWING_MODE != "ends":
 		xabove, xbelow = False, False
-		xabove = [ i for i,v in enumerate(xvar) if v>xmed ][0] # First index of xvar above mean (to exclude)
-		xbelow = [ i for i,v in enumerate(xvar) if v<xmed ][-1]
+		xabove = [ i for i,v in enumerate(xvar) if v>=xmed ][0] # First index of xvar above mean (to exclude)
+		xbelow = [ i for i,v in enumerate(xvar) if v<=xmed ][-1]
 		
 		xmmax, ymmax = False, False
 		xmmin, ymmin = False, False
