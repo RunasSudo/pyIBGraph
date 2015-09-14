@@ -32,6 +32,11 @@ SWING_CENTRE = "middle"
 ERRORBAR_CAP_SIZE = 3
 MINMAX_TRIES = 3
 
+# ========== END CONFIGURATION PARAMETERS ==========
+
+X_U = X_U.replace(r" ", r"\ ")
+Y_U = Y_U.replace(r" ", r"\ ")
+
 import matplotlib as mpl
 import numpy as np
 
@@ -189,7 +194,10 @@ for trial in range(0, MINMAX_TRIES):
 		if u == "":
 			return q
 		else:
-			return "\\left(" + q + "/\\mathrm{" + u + "}\\right)"
+			if r"\ " in u:
+				return "\\left(" + q + "/\!\\left(\\mathrm{" + u + "}\\right)\\right)"
+			else:
+				return "\\left(" + q + "/\\mathrm{" + u + "}\\right)"
 
 	plt.text(
 		0.1 if "left" in EQ_POS else 0.9,
