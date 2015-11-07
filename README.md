@@ -31,8 +31,8 @@ Settings for the program are located at the top of the script:
   - `"bar"`: swing the lines to encompass all individual error bars, excluding caps
   - `"ends"`: draw a line from the top-left/bottom-right corner formed by the error bars of the leftmost data point, to the bottom-right/top-left corner formed by the error bars of the rightmost data point (pre-2016 style)
 - **`SWING_CENTRE`**: the mode for calculating the middle of the data through which to swing the minimum and maximum lines
-  - Use `""` if using `SWING_MODE = "ends"`.
-  - `"middle"`: use the point on the line of best fit at the middle of the *x* data ((*x*<sub>max</sub> + *x*<sub>min</sub>) / 2)
+  - Ignored if using `SWING_MODE = "ends"`.
+  - `"midrange"`: use the point on the line of best fit at the [mid-range](https://en.wikipedia.org/wiki/Mid-range) of the *x* data ((*x*<sub>max</sub> + *x*<sub>min</sub>) / 2)
   - `"mean"`: use the point on the line of best fit at the mean of the *x* data
   - `"median"`: use the point on the line of best fit at the median of the *x* data
 - **`ERRORBAR_CAP_SIZE`**: the size of the error bar caps, in points (e.g. `3`)

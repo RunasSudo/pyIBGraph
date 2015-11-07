@@ -27,7 +27,7 @@ EQ_POS = "upper left"
 LEG_POS = "lower right"
 
 SWING_MODE = "cap"
-SWING_CENTRE = "middle"
+SWING_CENTRE = "midrange"
 
 ERRORBAR_CAP_SIZE = 3
 MINMAX_TRIES = 3
@@ -121,7 +121,7 @@ for trial in range(0, MINMAX_TRIES):
 
 	# Maximum/minimum line
 	xmed = False
-	if SWING_CENTRE == "middle":
+	if SWING_CENTRE == "midrange":
 		xmed = (min(xvar) + max(xvar)) / 2
 	if SWING_CENTRE == "mean":
 		xmed = np.mean(xvar)
