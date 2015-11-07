@@ -18,10 +18,10 @@
 DATA_FILE = "data.csv"
 OUTPUT_NAME = "graph.pdf"
 
-X_Q = "P^{-1}"
-X_U = "kPa^{-1}"
-Y_Q = "V"
-Y_U = "cm^3"
+X_Q = r"P^{-1}"
+X_U = r"kPa^{-1}"
+Y_Q = r"V"
+Y_U = r"cm^3"
 
 EQ_POS = "upper left"
 LEG_POS = "lower right"
