@@ -160,14 +160,16 @@ for trial in range(0, MINMAX_TRIES):
 				capsize_uy = capsize_u[0][1]
 				
 				if SWING_MODE == "cap":
-					tryPoint(xvar[i] + xunc[i], yvar[i] + capsize_uy)
-					tryPoint(xvar[i] + xunc[i], yvar[i] - capsize_uy)
-					tryPoint(xvar[i] - xunc[i], yvar[i] + capsize_uy)
-					tryPoint(xvar[i] - xunc[i], yvar[i] - capsize_uy)
-					tryPoint(xvar[i] + capsize_ux, yvar[i] + yunc[i])
-					tryPoint(xvar[i] - capsize_ux, yvar[i] + yunc[i])
-					tryPoint(xvar[i] + capsize_ux, yvar[i] - yunc[i])
-					tryPoint(xvar[i] - capsize_ux, yvar[i] - yunc[i])
+					if xunc[i] > 0:
+						tryPoint(xvar[i] + xunc[i], yvar[i] + capsize_uy)
+						tryPoint(xvar[i] + xunc[i], yvar[i] - capsize_uy)
+						tryPoint(xvar[i] - xunc[i], yvar[i] + capsize_uy)
+						tryPoint(xvar[i] - xunc[i], yvar[i] - capsize_uy)
+					if yunc[i] > 0:
+						tryPoint(xvar[i] + capsize_ux, yvar[i] + yunc[i])
+						tryPoint(xvar[i] - capsize_ux, yvar[i] + yunc[i])
+						tryPoint(xvar[i] + capsize_ux, yvar[i] - yunc[i])
+						tryPoint(xvar[i] - capsize_ux, yvar[i] - yunc[i])
 				
 				if SWING_MODE == "corner":
 					tryPoint(xvar[i] + xunc[i], yvar[i] + yunc[i])
