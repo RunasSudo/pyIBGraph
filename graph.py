@@ -153,7 +153,7 @@ for trial in range(0, MINMAX_TRIES):
 		for i in range(len(xvar)):
 			if i > xabove or i < xbelow:
 				# Do matplotlib magic
-				capsize_in = ERRORBAR_CAP_SIZE / 72 * 2
+				capsize_in = (0.7 * ERRORBAR_CAP_SIZE) / 72 * 2
 				capsize_px = fig.dpi_scale_trans.transform([capsize_in, capsize_in])
 				capsize_u = ax.transData.inverted().transform([capsize_px, capsize_px]) - ax.transData.inverted().transform([0, 0])
 				capsize_ux = capsize_u[0][0]
