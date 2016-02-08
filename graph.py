@@ -74,9 +74,10 @@ pgf_with_lualatex = {
 	"pgf.texsystem": "lualatex",
 	"font.family": "serif",
 	"text.usetex": True,
+	"text.latex.unicode": True,
 	"pgf.rcfonts": False,
 	"pgf.preamble": [
-		r"\usepackage{amsmath,amssymb}",
+		r"\usepackage{mathtools,amssymb}",
 		#r"\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}",
 		#r"\usepackage[T1]{fontenc}",
 		#r"\usepackage[utf8]{inputenc}",
