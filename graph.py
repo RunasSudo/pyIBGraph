@@ -212,7 +212,7 @@ for trial in range(0, MINMAX_TRIES):
 	plt.text(
 		0.1 if "left" in EQ_POS else 0.9,
 		0.85 if "upper" in EQ_POS else 0.15,
-		"$" + shortQuantityAndUnit(Y_Q + "_\\mathrm{max}", Y_U) + "=" + prettyNum(mmax) + shortQuantityAndUnit(X_Q, X_U) + signedPretty(cmax) + "$\n$" + shortQuantityAndUnit(Y_Q + "_\\mathrm{min}", Y_U) + "=" + prettyNum(mmin) + shortQuantityAndUnit(X_Q, X_U) + signedPretty(cmin) + "$",
+		"$" + shortQuantityAndUnit("{" + Y_Q + "}_\\mathrm{max}", Y_U) + "=" + prettyNum(mmax) + shortQuantityAndUnit(X_Q, X_U) + signedPretty(cmax) + "$\n$" + shortQuantityAndUnit("{" + Y_Q + "}_\\mathrm{min}", Y_U) + "=" + prettyNum(mmin) + shortQuantityAndUnit(X_Q, X_U) + signedPretty(cmin) + "$",
 		verticalalignment=("top" if "upper" in EQ_POS else "bottom"),
 		horizontalalignment=("left" if "left" in EQ_POS else "right"),
 		transform=ax.transAxes, fontsize=10
